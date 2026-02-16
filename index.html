@@ -1,0 +1,918 @@
+<!DOCTYPE html>
+<html lang="fr" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TARS — Chief of Staff IA | Assistant IA pour CEOs & Founders</title>
+    <meta name="description" content="L'assistant IA personnel qui transforme votre quotidien de dirigeant. Briefings matinaux, tri d'emails automatique, monitoring business 24/7.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --color-bg: #0a0a0a;
+            --color-bg-secondary: #111111;
+            --color-bg-tertiary: #1a1a1a;
+            --color-text-primary: #ffffff;
+            --color-text-secondary: #a1a1aa;
+            --color-text-muted: #71717a;
+            --color-border: #27272a;
+            --color-border-light: #3f3f46;
+            --color-accent: #3b82f6;
+            --color-accent-hover: #2563eb;
+            --color-success: #10b981;
+            --color-warning: #f59e0b;
+            --radius-sm: 0.375rem;
+            --radius-md: 0.5rem;
+            --radius-lg: 0.75rem;
+            --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+            --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: var(--color-bg);
+            color: var(--color-text-primary);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+
+        @media (min-width: 768px) {
+            .container {
+                padding: 0 2rem;
+            }
+        }
+
+        /* Typography */
+        .heading-xl {
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            font-weight: 700;
+            line-height: 1.1;
+            text-wrap: balance;
+            letter-spacing: -0.02em;
+        }
+
+        .heading-lg {
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 600;
+            line-height: 1.2;
+            text-wrap: balance;
+            letter-spacing: -0.01em;
+        }
+
+        .heading-md {
+            font-size: clamp(1.5rem, 3vw, 2rem);
+            font-weight: 600;
+            line-height: 1.3;
+            text-wrap: balance;
+        }
+
+        .text-lg {
+            font-size: clamp(1.125rem, 2vw, 1.25rem);
+            line-height: 1.6;
+            text-wrap: pretty;
+        }
+
+        .text-base {
+            font-size: 1rem;
+            line-height: 1.6;
+            text-wrap: pretty;
+        }
+
+        .text-sm {
+            font-size: 0.875rem;
+            line-height: 1.5;
+        }
+
+        /* Components */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            padding: 0.875rem 2rem;
+            border-radius: var(--radius-md);
+            font-weight: 500;
+            text-decoration: none;
+            transition: all 150ms ease-out;
+            border: 1px solid transparent;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--color-accent) 0%, var(--color-accent-hover) 100%);
+            color: white;
+            box-shadow: var(--shadow-md);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .btn-secondary {
+            background: var(--color-bg-tertiary);
+            color: var(--color-text-primary);
+            border-color: var(--color-border-light);
+        }
+
+        .btn-secondary:hover {
+            background: var(--color-bg-secondary);
+            border-color: var(--color-border-light);
+        }
+
+        .card {
+            background: var(--color-bg-secondary);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-lg);
+            padding: 2rem;
+            box-shadow: var(--shadow-sm);
+        }
+
+        /* Header */
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(10, 10, 10, 0.8);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--color-border);
+            z-index: 50;
+        }
+
+        .nav {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1rem 0;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--color-text-primary);
+            text-decoration: none;
+        }
+
+        /* Hero Section */
+        .hero {
+            padding: 8rem 0 4rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 150%;
+            height: 100%;
+            background: radial-gradient(ellipse at center, rgba(59, 130, 246, 0.1) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero-title {
+            margin-bottom: 1.5rem;
+        }
+
+        .hero-subtitle {
+            color: var(--color-text-secondary);
+            margin-bottom: 2rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .hero-cta {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        @media (min-width: 640px) {
+            .hero-cta {
+                flex-direction: row;
+                justify-content: center;
+            }
+        }
+
+        /* Section Styles */
+        .section {
+            padding: 4rem 0;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 600ms ease-out, transform 600ms ease-out;
+        }
+
+        .section.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .section {
+                opacity: 1;
+                transform: none;
+                transition: none;
+            }
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .section-title {
+            margin-bottom: 1rem;
+        }
+
+        .section-subtitle {
+            color: var(--color-text-secondary);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Problem Section */
+        .problem {
+            background: var(--color-bg-secondary);
+            border-top: 1px solid var(--color-border);
+            border-bottom: 1px solid var(--color-border);
+        }
+
+        .problem-content {
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .problem-stat {
+            color: var(--color-warning);
+            font-size: 4rem;
+            font-weight: 700;
+            display: block;
+            margin-bottom: 1rem;
+        }
+
+        /* Features Grid */
+        .features-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        @media (min-width: 768px) {
+            .features-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .features-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        .feature-card {
+            text-align: center;
+        }
+
+        .feature-icon {
+            width: 3rem;
+            height: 3rem;
+            margin: 0 auto 1rem;
+            background: var(--color-accent);
+            border-radius: var(--radius-lg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+
+        .feature-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .feature-description {
+            color: var(--color-text-secondary);
+        }
+
+        /* How it works */
+        .steps {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 3rem;
+            margin-top: 3rem;
+        }
+
+        @media (min-width: 768px) {
+            .steps {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        .step {
+            text-align: center;
+            position: relative;
+        }
+
+        .step-number {
+            width: 3rem;
+            height: 3rem;
+            background: var(--color-accent);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            margin: 0 auto 1rem;
+            font-size: 1.25rem;
+        }
+
+        .step-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        /* Pricing */
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        @media (min-width: 768px) {
+            .pricing-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        .pricing-card {
+            position: relative;
+            transition: transform 200ms ease-out;
+        }
+
+        .pricing-card:hover {
+            transform: translateY(-4px);
+        }
+
+        .pricing-card.featured {
+            border-color: var(--color-accent);
+            background: linear-gradient(135deg, var(--color-bg-secondary) 0%, rgba(59, 130, 246, 0.05) 100%);
+        }
+
+        .pricing-header {
+            margin-bottom: 2rem;
+        }
+
+        .pricing-name {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .pricing-price {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--color-accent);
+            margin-bottom: 0.5rem;
+        }
+
+        .pricing-setup {
+            color: var(--color-text-muted);
+            font-size: 0.875rem;
+        }
+
+        .pricing-features {
+            list-style: none;
+            margin-bottom: 2rem;
+        }
+
+        .pricing-features li {
+            padding: 0.5rem 0;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .pricing-features li::before {
+            content: '✓';
+            color: var(--color-success);
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+
+        /* Testimonials */
+        .testimonials-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        @media (min-width: 768px) {
+            .testimonials-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        .testimonial {
+            padding: 1.5rem;
+        }
+
+        .testimonial-quote {
+            font-size: 1.125rem;
+            margin-bottom: 1rem;
+            font-style: italic;
+        }
+
+        .testimonial-author {
+            font-weight: 600;
+        }
+
+        .testimonial-role {
+            color: var(--color-text-secondary);
+            font-size: 0.875rem;
+        }
+
+        /* FAQ */
+        .faq-list {
+            max-width: 800px;
+            margin: 3rem auto 0;
+        }
+
+        .faq-item {
+            border-bottom: 1px solid var(--color-border);
+            padding: 1.5rem 0;
+        }
+
+        .faq-question {
+            font-weight: 600;
+            margin-bottom: 1rem;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .faq-answer {
+            color: var(--color-text-secondary);
+            line-height: 1.6;
+            display: none;
+        }
+
+        .faq-item.active .faq-answer {
+            display: block;
+        }
+
+        .faq-toggle {
+            transition: transform 200ms ease-out;
+        }
+
+        .faq-item.active .faq-toggle {
+            transform: rotate(180deg);
+        }
+
+        /* Final CTA */
+        .final-cta {
+            background: var(--color-bg-secondary);
+            border-top: 1px solid var(--color-border);
+            text-align: center;
+            padding: 4rem 0;
+        }
+
+        /* Footer */
+        .footer {
+            border-top: 1px solid var(--color-border);
+            padding: 2rem 0;
+            text-align: center;
+            color: var(--color-text-muted);
+        }
+
+        /* Utilities */
+        .text-center { text-align: center; }
+        .text-accent { color: var(--color-accent); }
+        .text-muted { color: var(--color-text-muted); }
+        .mb-2 { margin-bottom: 0.5rem; }
+        .mb-4 { margin-bottom: 1rem; }
+        .mb-8 { margin-bottom: 2rem; }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <nav class="container nav">
+            <a href="#" class="logo">TARS</a>
+            <a href="#calendly" class="btn btn-primary">Réserver une démo</a>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="heading-xl hero-title">
+                    Votre <span class="text-accent">Chief of Staff IA</span><br>
+                    travaille pendant que vous dormez
+                </h1>
+                <p class="text-lg hero-subtitle">
+                    L'assistant IA personnel qui transforme votre quotidien de dirigeant. 
+                    Briefings matinaux, tri d'emails automatique, monitoring business 24/7.
+                </p>
+                <div class="hero-cta">
+                    <a href="#calendly" class="btn btn-primary">
+                        <span>Réserver une démo gratuite</span>
+                        <span>→</span>
+                    </a>
+                    <p class="text-sm text-muted">Setup en 48h • Annulation gratuite</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Problem Section -->
+    <section class="problem section">
+        <div class="container">
+            <div class="problem-content">
+                <span class="problem-stat">2h/jour</span>
+                <h2 class="heading-lg mb-4">
+                    Vous passez 2 heures par jour sur des tâches que l'IA peut faire
+                </h2>
+                <p class="text-lg text-muted">
+                    Trier les emails, préparer vos briefings, suivre vos KPIs, gérer vos rappels... 
+                    Et si votre IA s'occupait de tout ça automatiquement ?
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Solution Section -->
+    <section class="section">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="heading-lg section-title">Ce que TARS fait pour vous</h2>
+                <p class="text-lg section-subtitle">
+                    Un assistant IA personnel qui s'adapte à votre workflow et communique avec vos outils préférés
+                </p>
+            </div>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">🌅</div>
+                    <h3 class="feature-title">Briefing matinal</h3>
+                    <p class="feature-description">
+                        Calendrier, emails prioritaires, météo, KPIs business, news de votre secteur. 
+                        Tout dans un seul message.
+                    </p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📧</div>
+                    <h3 class="feature-title">Tri automatique d'emails</h3>
+                    <p class="feature-description">
+                        TARS classe vos emails par priorité et répond automatiquement aux demandes courantes.
+                    </p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📊</div>
+                    <h3 class="feature-title">Monitoring business 24/7</h3>
+                    <p class="feature-description">
+                        Stripe, Google Analytics, mentions sur le web. Votre IA surveille tout et vous alerte.
+                    </p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">✅</div>
+                    <h3 class="feature-title">Gestion des tâches</h3>
+                    <p class="feature-description">
+                        Rappels intelligents, suivi de projets, deadlines. TARS n'oublie jamais rien.
+                    </p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">💬</div>
+                    <h3 class="feature-title">Communication multicanal</h3>
+                    <p class="feature-description">
+                        WhatsApp, Telegram, Slack. TARS vous contacte là où vous êtes, quand c'est important.
+                    </p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🔧</div>
+                    <h3 class="feature-title">Automations custom</h3>
+                    <p class="feature-description">
+                        Des workflows sur mesure pour votre business. TARS apprend et s'améliore avec le temps.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How it works -->
+    <section class="section">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="heading-lg section-title">Comment ça marche</h2>
+                <p class="text-lg section-subtitle">
+                    De l'appel découverte à votre IA opérationnelle en moins de 48h
+                </p>
+            </div>
+            <div class="steps">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <h3 class="step-title">Appel découverte</h3>
+                    <p class="text-base text-muted">
+                        30 minutes pour comprendre vos besoins, votre workflow et vos outils actuels.
+                    </p>
+                </div>
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <h3 class="step-title">Setup en 48h</h3>
+                    <p class="text-base text-muted">
+                        Notre équipe configure TARS selon vos spécifications. Intégrations, automations, préférences.
+                    </p>
+                </div>
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <h3 class="step-title">Votre IA travaille</h3>
+                    <p class="text-base text-muted">
+                        TARS prend le relais. Briefings quotidiens, tri d'emails, monitoring automatique. 24/7.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing -->
+    <section class="section">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="heading-lg section-title">Tarifs transparents</h2>
+                <p class="text-lg section-subtitle">
+                    Choisissez le plan qui correspond à vos besoins. Changez quand vous voulez.
+                </p>
+            </div>
+            <div class="pricing-grid">
+                <div class="pricing-card card">
+                    <div class="pricing-header">
+                        <h3 class="pricing-name">Starter</h3>
+                        <div class="pricing-price">149€<span class="text-muted">/mois</span></div>
+                        <p class="pricing-setup">+ 299€ de setup</p>
+                    </div>
+                    <ul class="pricing-features">
+                        <li>Briefing matinal quotidien</li>
+                        <li>Tri automatique des emails</li>
+                        <li>Rappels et tâches</li>
+                        <li>1 canal de communication</li>
+                        <li>Support par email</li>
+                    </ul>
+                    <a href="#calendly" class="btn btn-secondary" style="width: 100%;">Commencer</a>
+                </div>
+                <div class="pricing-card card featured">
+                    <div class="pricing-header">
+                        <h3 class="pricing-name">Pro</h3>
+                        <div class="pricing-price">299€<span class="text-muted">/mois</span></div>
+                        <p class="pricing-setup">+ 499€ de setup</p>
+                    </div>
+                    <ul class="pricing-features">
+                        <li>Tout du plan Starter</li>
+                        <li>Monitoring business (Stripe, Analytics)</li>
+                        <li>Automations personnalisées</li>
+                        <li>3 canaux de communication</li>
+                        <li>Intégrations avancées</li>
+                        <li>Support prioritaire</li>
+                    </ul>
+                    <a href="#calendly" class="btn btn-primary" style="width: 100%;">Le plus populaire</a>
+                </div>
+                <div class="pricing-card card">
+                    <div class="pricing-header">
+                        <h3 class="pricing-name">Enterprise</h3>
+                        <div class="pricing-price">599€<span class="text-muted">/mois</span></div>
+                        <p class="pricing-setup">+ 999€ de setup</p>
+                    </div>
+                    <ul class="pricing-features">
+                        <li>Tout du plan Pro</li>
+                        <li>Intégrations illimitées</li>
+                        <li>IA dédiée avec fine-tuning</li>
+                        <li>Canaux illimités</li>
+                        <li>SLA de 99.9%</li>
+                        <li>Account manager dédié</li>
+                        <li>Support 24/7</li>
+                    </ul>
+                    <a href="#calendly" class="btn btn-secondary" style="width: 100%;">Nous contacter</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials -->
+    <section class="section">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="heading-lg section-title">Ils ont repris le contrôle de leur temps</h2>
+            </div>
+            <div class="testimonials-grid">
+                <div class="testimonial card">
+                    <p class="testimonial-quote">
+                        "TARS m'a fait gagner 2h par jour. Mon briefing matinal est maintenant parfait et je ne rate plus aucun email important."
+                    </p>
+                    <div>
+                        <p class="testimonial-author">Alexandre M.</p>
+                        <p class="testimonial-role">Fondateur, SaaS B2B</p>
+                    </div>
+                </div>
+                <div class="testimonial card">
+                    <p class="testimonial-quote">
+                        "Le monitoring automatique de Stripe et Analytics m'alerte instantanément sur les anomalies. Un game-changer pour mon business."
+                    </p>
+                    <div>
+                        <p class="testimonial-author">Sophie L.</p>
+                        <p class="testimonial-role">CEO, E-commerce</p>
+                    </div>
+                </div>
+                <div class="testimonial card">
+                    <p class="testimonial-quote">
+                        "L'équipe TARS a compris exactement mes besoins. Mon IA s'améliore chaque semaine et s'adapte parfaitement à mon workflow."
+                    </p>
+                    <div>
+                        <p class="testimonial-author">Marc D.</p>
+                        <p class="testimonial-role">Directeur, Agence Marketing</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="section">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="heading-lg section-title">Questions fréquentes</h2>
+            </div>
+            <div class="faq-list">
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFaq(this)">
+                        <span>Combien de temps faut-il pour que TARS soit opérationnel ?</span>
+                        <span class="faq-toggle">▼</span>
+                    </div>
+                    <div class="faq-answer">
+                        Moins de 48h après votre appel découverte. Nous configurons toutes vos intégrations et automations, puis vous recevez votre premier briefing matinal.
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFaq(this)">
+                        <span>TARS peut-il s'intégrer avec mes outils existants ?</span>
+                        <span class="faq-toggle">▼</span>
+                    </div>
+                    <div class="faq-answer">
+                        Oui, TARS se connecte avec Gmail, Outlook, Google Calendar, Stripe, Shopify, Slack, Notion, et plus de 50 autres outils via Zapier et nos APIs natives.
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFaq(this)">
+                        <span>Mes données sont-elles sécurisées ?</span>
+                        <span class="faq-toggle">▼</span>
+                    </div>
+                    <div class="faq-answer">
+                        Absolument. Chiffrement end-to-end, hébergement européen (GDPR compliant), et accès limité selon le principe du moindre privilège. Vos données ne sont jamais partagées.
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFaq(this)">
+                        <span>Puis-je personnaliser les automations ?</span>
+                        <span class="faq-toggle">▼</span>
+                    </div>
+                    <div class="faq-answer">
+                        Bien sûr. TARS apprend de vos préférences et nous pouvons créer des automations 100% sur mesure selon votre secteur d'activité et votre workflow.
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFaq(this)">
+                        <span>Que se passe-t-il si je ne suis pas satisfait ?</span>
+                        <span class="faq-toggle">▼</span>
+                    </div>
+                    <div class="faq-answer">
+                        Garantie satisfait ou remboursé de 30 jours. Si TARS ne vous fait pas gagner du temps, nous vous remboursons intégralement, sans question.
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFaq(this)">
+                        <span>TARS fonctionne-t-il en français ?</span>
+                        <span class="faq-toggle">▼</span>
+                    </div>
+                    <div class="faq-answer">
+                        Oui, TARS est entièrement bilingue français/anglais et peut s'adapter à votre langue de travail préférée. Nos briefings et communications respectent vos préférences linguistiques.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Final CTA -->
+    <section class="final-cta">
+        <div class="container">
+            <h2 class="heading-lg mb-4">Prêt à reprendre le contrôle de votre temps ?</h2>
+            <p class="text-lg text-muted mb-8" style="max-width: 600px; margin-left: auto; margin-right: auto;">
+                Rejoignez les dirigeants qui ont déjà automatisé leur quotidien avec TARS. 
+                Appel découverte gratuit, setup en 48h, résultats immédiats.
+            </p>
+            <a href="#calendly" class="btn btn-primary" style="font-size: 1.125rem; padding: 1rem 2.5rem;">
+                Réservez votre démo gratuite
+            </a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2024 TARS. Tous droits réservés.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Smooth scrolling and animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+
+        // Observe all sections
+        document.addEventListener('DOMContentLoaded', () => {
+            const sections = document.querySelectorAll('.section');
+            sections.forEach(section => observer.observe(section));
+        });
+
+        // FAQ Toggle
+        function toggleFaq(element) {
+            const faqItem = element.parentElement;
+            const isActive = faqItem.classList.contains('active');
+            
+            // Close all FAQ items
+            document.querySelectorAll('.faq-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            
+            // Open clicked item if it wasn't active
+            if (!isActive) {
+                faqItem.classList.add('active');
+            }
+        }
+
+        // Smooth scroll for CTA links
+        document.addEventListener('DOMContentLoaded', () => {
+            const ctaLinks = document.querySelectorAll('a[href="#calendly"]');
+            ctaLinks.forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    // In a real implementation, this would open a Calendly modal or redirect
+                    alert('Calendly integration would be implemented here. This is a demo placeholder.');
+                });
+            });
+        });
+
+        // Header background on scroll
+        window.addEventListener('scroll', () => {
+            const header = document.querySelector('.header');
+            if (window.scrollY > 100) {
+                header.style.background = 'rgba(10, 10, 10, 0.95)';
+            } else {
+                header.style.background = 'rgba(10, 10, 10, 0.8)';
+            }
+        });
+    </script>
+</body>
+</html>
