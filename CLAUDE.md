@@ -1,36 +1,82 @@
 # CLAUDE.md — TARS AI Landing Page
 
-## Project Overview
+> If it won't survive the next session, write it here.
 
-TARS is a B2B AI-powered "Chief of Staff" service for CEOs, founders, and business leaders. This repository contains the **marketing landing page** — a single static HTML file, fully in French (`lang="fr"`).
+## Identity
 
-There is no backend, no database, no build system. The entire site is one self-contained `index.html`.
+This repository is the **marketing landing page** for TARS — a B2B AI-powered "Chief of Staff" service for CEOs, founders, and business leaders. Single static HTML file, fully in French (`lang="fr"`). No backend, no database, no build system. One self-contained `index.html`, 918 lines.
+
+## Session Rhythm
+
+Every session working on this codebase follows three phases:
+
+### Orient (read before touching)
+1. Read this file
+2. Scan `index.html` structure — CSS (11–530), HTML (532–856), JS (858–916)
+3. Identify which section is affected by the current task
+4. Check if existing design tokens, classes, or patterns already solve the need
+
+### Work (make changes)
+5. Edit `index.html` — the only source file
+6. Use existing CSS variables, never hardcode colors or spacing
+7. Follow established naming conventions (see vocabulary below)
+8. Test at all three breakpoints: mobile (<640px), tablet (768px), desktop (1024px)
+
+### Persist (leave breadcrumbs)
+9. Update this file if the change introduces new patterns, sections, or conventions
+10. If a new CSS variable, class, or JS pattern was added, document it below
 
 ## Repository Structure
 
 ```
 tars-ai/
-├── CLAUDE.md        # This file
+├── CLAUDE.md        # This file — agent context, always read first
 └── index.html       # The entire landing page (918 lines)
 ```
 
 ### index.html Internal Layout
 
-| Section    | Lines     | Contents                                                        |
-|------------|-----------|-----------------------------------------------------------------|
-| CSS        | 11–530    | Design tokens, component styles, responsive layout, utilities   |
-| HTML       | 532–856   | Page sections: header, hero, features, pricing, FAQ, footer     |
-| JavaScript | 858–916   | Scroll animations, FAQ toggle, CTA handling, header scroll effect |
+| Layer      | Lines   | What Lives Here                                                 |
+|------------|---------|-----------------------------------------------------------------|
+| CSS        | 11–530  | Design tokens, component styles, responsive layout, utilities   |
+| HTML       | 532–856 | Page sections: header → hero → problem → features → pricing → FAQ → footer |
+| JavaScript | 858–916 | Scroll animations, FAQ toggle, CTA handling, header scroll effect |
+
+## Task Routing
+
+Use this decision tree when you receive a request:
+
+```
+Is it a visual/styling change?
+  └─ YES → Edit CSS block (lines 11–530). Use existing variables.
+  └─ NO ↓
+
+Is it a content change (text, pricing, features)?
+  └─ YES → Edit HTML block (lines 532–856). Keep French. Match existing structure.
+  └─ NO ↓
+
+Is it an interaction/behavior change?
+  └─ YES → Edit JS block (lines 858–916). Follow existing patterns.
+  └─ NO ↓
+
+Is it a new section?
+  └─ YES → Add HTML between existing sections. Add CSS above line 530.
+           Follow .section class pattern for scroll animations.
+  └─ NO ↓
+
+Is it about splitting into multiple files?
+  └─ YES → Confirm with user first. Default is single-file.
+```
 
 ## Tech Stack
 
 - **HTML5 / CSS3 / vanilla JavaScript** — no frameworks, no libraries
-- **Google Fonts** — Inter (300–700 weights), loaded via `<link>` preconnect
+- **Google Fonts** — Inter (300–700 weights), `<link>` preconnect
 - **No build tools** — no npm, no bundler, no transpiler
-- **No package manager** — no `package.json`, no dependencies to install
+- **No package manager** — no `package.json`, no dependencies
 - **No tests, linting, or CI/CD**
 
-## Development
+### Development
 
 ```bash
 # Serve locally (pick any)
@@ -38,86 +84,150 @@ python3 -m http.server
 npx http-server
 php -S localhost:8000
 
-# Or simply open index.html in a browser
+# Or just open index.html directly in a browser
 ```
 
-No install step. No environment variables. Changes to `index.html` are immediately reflected on reload.
+No install step. No environment variables. Changes reflect on reload.
 
-## Design System
+## Design System — Vocabulary
 
-### CSS Custom Properties (`:root`)
+The design system is the project's vocabulary. Every visual decision routes through these tokens.
 
-| Variable                  | Value                | Purpose              |
-|---------------------------|----------------------|----------------------|
-| `--color-bg`              | `#0a0a0a`            | Primary background   |
-| `--color-bg-secondary`    | `#111111`            | Card/section bg      |
-| `--color-bg-tertiary`     | `#1a1a1a`            | Hover/alt bg         |
-| `--color-text-primary`    | `#ffffff`            | Headings, body text  |
-| `--color-text-secondary`  | `#a1a1aa`            | Subtitles, descriptions |
-| `--color-text-muted`      | `#71717a`            | Captions, hints      |
-| `--color-border`          | `#27272a`            | Default borders      |
-| `--color-border-light`    | `#3f3f46`            | Lighter borders      |
-| `--color-accent`          | `#3b82f6`            | Primary blue accent  |
-| `--color-accent-hover`    | `#2563eb`            | Accent hover state   |
-| `--color-success`         | `#10b981`            | Checkmarks, success  |
-| `--color-warning`         | `#f59e0b`            | Stats highlight      |
-| `--radius-sm/md/lg`       | `0.375/0.5/0.75rem`  | Border radius scale  |
-| `--shadow-sm/md/lg`       | Various               | Box shadow scale     |
+### Color Tokens (`:root`)
 
-### Typography
+| Token                     | Value       | When to Use                        |
+|---------------------------|-------------|------------------------------------|
+| `--color-bg`              | `#0a0a0a`   | Page background                    |
+| `--color-bg-secondary`    | `#111111`   | Cards, elevated sections           |
+| `--color-bg-tertiary`     | `#1a1a1a`   | Hover states, alternate surfaces   |
+| `--color-text-primary`    | `#ffffff`   | Headings, primary body text        |
+| `--color-text-secondary`  | `#a1a1aa`   | Subtitles, feature descriptions    |
+| `--color-text-muted`      | `#71717a`   | Captions, fine print, hints        |
+| `--color-border`          | `#27272a`   | Section dividers, card borders     |
+| `--color-border-light`    | `#3f3f46`   | Secondary button borders, hovers   |
+| `--color-accent`          | `#3b82f6`   | CTAs, highlights, interactive elements |
+| `--color-accent-hover`    | `#2563eb`   | Accent hover/active state          |
+| `--color-success`         | `#10b981`   | Checkmarks, positive indicators    |
+| `--color-warning`         | `#f59e0b`   | Statistics, attention-grabbing numbers |
 
-Fluid type scale using `clamp()`:
-- `.heading-xl` — hero title (`clamp(2.5rem, 5vw, 4rem)`)
-- `.heading-lg` — section titles (`clamp(2rem, 4vw, 3rem)`)
-- `.heading-md` — subsection titles (`clamp(1.5rem, 3vw, 2rem)`)
-- `.text-lg` — lead paragraphs (`clamp(1.125rem, 2vw, 1.25rem)`)
-- `.text-base` — body copy (`1rem`)
-- `.text-sm` — small text (`0.875rem`)
+### Spacing & Shape Tokens
+
+| Token              | Value          | Purpose           |
+|--------------------|----------------|-------------------|
+| `--radius-sm`      | `0.375rem`     | Small elements    |
+| `--radius-md`      | `0.5rem`       | Buttons, inputs   |
+| `--radius-lg`      | `0.75rem`      | Cards, containers |
+| `--shadow-sm/md/lg`| Various        | Elevation scale   |
+
+### Typography Scale
+
+Fluid sizing via `clamp()` — never use fixed `font-size` for headings:
+
+| Class          | Size                            | Use For              |
+|----------------|---------------------------------|----------------------|
+| `.heading-xl`  | `clamp(2.5rem, 5vw, 4rem)`     | Hero title only      |
+| `.heading-lg`  | `clamp(2rem, 4vw, 3rem)`       | Section titles       |
+| `.heading-md`  | `clamp(1.5rem, 3vw, 2rem)`     | Subsection titles    |
+| `.text-lg`     | `clamp(1.125rem, 2vw, 1.25rem)`| Lead paragraphs      |
+| `.text-base`   | `1rem`                          | Body copy            |
+| `.text-sm`     | `0.875rem`                      | Small text, captions |
 
 ### Responsive Breakpoints
 
-- **640px** — hero CTA switches from column to row
-- **768px** — grids go from 1-col to 2-col; container padding increases
-- **1024px** — features grid goes to 3-col
+| Breakpoint | What Changes                                      |
+|------------|---------------------------------------------------|
+| `640px`    | Hero CTA: column → row                            |
+| `768px`    | Grids: 1-col → 2-col; container padding increases |
+| `1024px`   | Features grid: 2-col → 3-col                      |
 
-`@media (prefers-reduced-motion: reduce)` disables scroll animations.
+`@media (prefers-reduced-motion: reduce)` disables all scroll animations.
 
-## CSS Conventions
+## Naming Conventions
 
-- **BEM-inspired naming**: `.btn-primary`, `.feature-card`, `.pricing-card`, `.faq-item`, `.step-number`
-- **Utility classes**: `.text-center`, `.text-accent`, `.text-muted`, `.mb-2`, `.mb-4`, `.mb-8`
-- **Component pattern**: `.card` base class with modifier variants (`.featured`)
-- All styles are embedded in a single `<style>` block — no external stylesheets
+### CSS Classes — Pattern Reference
+
+| Pattern              | Examples                                         | Rule                              |
+|----------------------|--------------------------------------------------|-----------------------------------|
+| Component            | `.card`, `.btn`, `.header`, `.nav`                | Noun, singular                    |
+| Component + modifier | `.btn-primary`, `.btn-secondary`, `.card.featured`| Hyphenated modifier               |
+| Section-scoped       | `.feature-card`, `.pricing-card`, `.faq-item`     | Section prefix + component        |
+| Sub-element          | `.feature-icon`, `.pricing-price`, `.step-number` | Parent prefix + role              |
+| Utility              | `.text-center`, `.text-accent`, `.mb-4`           | Property-value, no section prefix |
+
+### Adding New Classes
+
+1. Check if an existing class already covers the need
+2. If section-specific → prefix with section name (e.g., `.testimonial-*`)
+3. If reusable → add as utility in the utilities block (line ~523)
+4. Never create a class used only once — use inline styles for one-offs
 
 ## JavaScript Patterns
 
-All JS is in a `<script>` block at the end of `<body>`:
+All JS lives in a single `<script>` block at end of `<body>` (lines 858–916):
 
-- **Intersection Observer** — sections start with `opacity: 0; transform: translateY(30px)` and get `.visible` class on scroll into view
-- **FAQ accordion** — `toggleFaq()` toggles `.active` on `.faq-item`, closes all others first (single-open accordion)
-- **CTA links** — all `href="#calendly"` links show a placeholder `alert()` (Calendly integration not yet wired)
-- **Header effect** — `scroll` listener increases header background opacity past 100px scroll
+| Pattern                | Implementation                        | How to Extend                        |
+|------------------------|---------------------------------------|--------------------------------------|
+| Scroll animation       | `IntersectionObserver` + `.visible`   | Add `.section` class to new sections |
+| FAQ accordion          | `toggleFaq()` → `.active` toggle      | Add `.faq-item` with same structure  |
+| CTA handling           | `href="#calendly"` → `alert()` placeholder | Replace alert with real integration |
+| Header scroll effect   | `scroll` listener → opacity change    | Modify threshold (currently 100px)   |
 
-## Page Sections
+### Adding New Interactions
 
-1. **Header** — fixed nav with logo + "Réserver une démo" CTA
-2. **Hero** — headline, subtitle, primary CTA button
-3. **Problem** — "2h/jour" stat with pain-point messaging
-4. **Features** — 6-card grid (briefing, email triage, monitoring, tasks, multichannel, automations)
-5. **How it works** — 3-step process (discovery call, 48h setup, AI operational)
-6. **Pricing** — 3 tiers: Starter (149€), Pro (299€, featured), Enterprise (599€) + setup fees
-7. **Testimonials** — 3 customer quotes
-8. **FAQ** — 6 collapsible items
-9. **Final CTA** — closing call to action
-10. **Footer** — copyright line
+1. Use vanilla JS only — no jQuery, no framework imports
+2. Attach listeners inside `DOMContentLoaded`
+3. Use `classList` operations for state changes
+4. Respect `prefers-reduced-motion` for any animation
 
-## Guidelines for AI Assistants
+## Page Sections — Content Map
 
-- **Keep the single-file architecture** — do not split into separate CSS/JS files unless explicitly asked
-- **All content must remain in French** — the site targets French-speaking executives
-- **Preserve the design token system** — use existing CSS variables, don't hardcode colors or spacing
-- **Respect `prefers-reduced-motion`** — any new animations must have reduced-motion fallbacks
-- **Test across breakpoints** — verify changes at mobile (<640px), tablet (768px), and desktop (1024px)
-- **No build tooling** — changes should work without any compilation or bundling step
-- **Calendly integration is a placeholder** — CTA links currently show an alert; a real implementation will need updating
-- **Footer copyright says 2024** — update if the year changes
+| #  | Section        | HTML Lines | Key Classes             | Content                          |
+|----|----------------|------------|-------------------------|----------------------------------|
+| 1  | Header         | 534–539    | `.header`, `.nav`       | Logo + demo CTA                  |
+| 2  | Hero           | 542–562    | `.hero`, `.hero-content` | Headline, subtitle, CTA         |
+| 3  | Problem        | 565–578    | `.problem`              | "2h/jour" stat + pain point      |
+| 4  | Features       | 581–635    | `.features-grid`        | 6 cards with emoji icons         |
+| 5  | How it works   | 638–670    | `.steps`                | 3-step process                   |
+| 6  | Pricing        | 673–732    | `.pricing-grid`         | 3 tiers (149€/299€/599€)        |
+| 7  | Testimonials   | 735–770    | `.testimonials-grid`    | 3 customer quotes                |
+| 8  | FAQ            | 773–835    | `.faq-list`             | 6 collapsible items              |
+| 9  | Final CTA      | 838–849    | `.final-cta`            | Closing call to action           |
+| 10 | Footer         | 852–856    | `.footer`               | Copyright (currently says 2024)  |
+
+## Common Pitfalls
+
+These are the failure modes specific to this project. Avoid them:
+
+| Pitfall                              | Why It Happens                           | What to Do Instead                              |
+|--------------------------------------|------------------------------------------|-------------------------------------------------|
+| Hardcoded colors                     | Grabbing hex values instead of variables | Always use `var(--color-*)` tokens              |
+| Breaking mobile layout               | Testing only at desktop width            | Check all 3 breakpoints after every change      |
+| Adding English text                  | Defaulting to English                    | All user-facing text must be in French           |
+| Splitting files without asking       | Instinct to separate concerns            | Keep single-file unless user explicitly requests |
+| Fixed font sizes for headings        | Using `px` or `rem` directly             | Use `clamp()` pattern matching existing scale    |
+| Forgetting reduced-motion            | Adding CSS animations                    | Always add `prefers-reduced-motion` fallback     |
+| Adding npm/build dependencies        | Instinct to install packages             | This is a zero-dependency project — keep it that |
+| Duplicating existing patterns        | Not checking what already exists         | Search CSS block first for existing classes      |
+| Inline styles for recurring patterns | Quick fix that doesn't scale             | Create a class following naming conventions      |
+| Modifying `:root` without documenting| Adding a token and forgetting this file  | Update this CLAUDE.md when adding design tokens  |
+
+## Evolution Signals
+
+Update this file when any of these occur:
+
+- A new CSS variable is added to `:root`
+- A new reusable class pattern is introduced
+- A new page section is created
+- The JS architecture changes (e.g., new observer, new event pattern)
+- External dependencies are introduced (fonts, scripts, APIs)
+- The file is split into multiple files
+- Calendly placeholder is replaced with real integration
+
+## Constraints — Non-Negotiable
+
+1. **French only** — all user-visible content in French (`lang="fr"`)
+2. **Single file** — do not split without explicit user request
+3. **Zero dependencies** — no npm, no CDN scripts (Google Fonts is the sole external resource)
+4. **Design tokens** — never hardcode colors, radii, or shadows
+5. **Accessibility** — respect `prefers-reduced-motion`, maintain semantic HTML
+6. **Responsive** — every change must work at mobile, tablet, and desktop
