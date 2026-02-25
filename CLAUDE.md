@@ -30,8 +30,11 @@ Every session working on this codebase follows three phases:
 
 ```
 tars-ai/
-├── CLAUDE.md        # This file — agent context, always read first
-└── index.html       # The entire landing page (918 lines)
+├── CLAUDE.md            # This file — agent context, always read first
+├── index.html           # The entire landing page (918 lines)
+└── tasks/
+    ├── todo.md          # Current task plan with checkboxes
+    └── lessons.md       # Cumulative corrections & rules learned
 ```
 
 ### index.html Internal Layout
@@ -222,6 +225,70 @@ Update this file when any of these occur:
 - External dependencies are introduced (fonts, scripts, APIs)
 - The file is split into multiple files
 - Calendly placeholder is replaced with real integration
+
+## Workflow — How the Agent Works
+
+These rules govern how the AI agent operates on this project. They are adapted to the reality of TARS AI: a single `index.html`, zero build system, visual output only.
+
+### 1. Plan Before Touching
+
+- Enter plan mode for any task involving **3+ edits** or **cross-layer changes** (CSS + HTML + JS)
+- Write the plan to `tasks/todo.md` with checkable items before starting
+- If something breaks mid-task → **STOP**, re-read this file, re-plan. Don't push through blindly
+- For single-layer, single-section changes (e.g., changing one text string) → skip planning, just do it
+
+### 2. Subagent Strategy
+
+- Use subagents to **explore `index.html`** without flooding main context (918 lines is a lot to hold)
+- Offload to subagents: "find all uses of `--color-accent`", "check all breakpoint behavior for `.pricing-grid`"
+- One task per subagent — don't bundle unrelated searches
+- Main context stays focused on the actual edit
+
+### 3. Learn From Corrections
+
+- After ANY correction from the user → add the pattern to `tasks/lessons.md`
+- Format: `| What went wrong | Why | Rule to follow |`
+- Review `tasks/lessons.md` at session start — don't repeat mistakes
+- Lessons are cumulative: they survive across sessions
+
+### 4. Verify Before Declaring Done
+
+- Never say "c'est fait" without checking:
+  - **Tokens**: no hardcoded colors/spacing? Uses `var(--color-*)` and `var(--radius-*)`?
+  - **French**: all new text in French?
+  - **Responsive**: works at 640px, 768px, 1024px?
+  - **Reduced motion**: new animations have `prefers-reduced-motion` fallback?
+  - **Single file**: nothing was split?
+- Ask yourself: "Would someone reviewing this landing page spot anything broken?"
+
+### 5. Demand Elegance (When It Matters)
+
+- For visual/structural changes: pause and ask "is there a simpler way using existing tokens/classes?"
+- If a fix requires more than 3 new CSS rules → check if existing patterns already solve it
+- If something feels hacky (inline styles, magic numbers, `!important`) → refactor using the design system
+- For trivial text changes → don't overthink it, just edit
+
+### 6. Autonomous Problem Solving
+
+- When given a bug report (broken layout, wrong color, misaligned element) → just fix it
+- Read the relevant section of `index.html`, identify root cause, apply fix
+- Don't ask "which line is it on?" — use the Content Map above to locate it
+- Zero hand-holding required from the user
+
+### 7. Track Progress
+
+1. Write plan to `tasks/todo.md` with `- [ ]` checkboxes
+2. Mark items `- [x]` as completed — don't batch, mark immediately
+3. At task end: add a `## Review` section to `tasks/todo.md` summarizing what changed
+4. Update `tasks/lessons.md` if any correction was received
+
+### Core Principles
+
+| Principle | Applied to TARS AI |
+|-----------|--------------------|
+| **Simplicity First** | One file. Existing tokens. Minimal edits. Don't add complexity. |
+| **No Laziness** | Find root causes in CSS/HTML/JS. No `!important` hacks, no inline-style band-aids. |
+| **Minimal Impact** | Touch only the lines that need changing. Don't refactor adjacent code "while you're there". |
 
 ## Constraints — Non-Negotiable
 
