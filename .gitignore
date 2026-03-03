@@ -1,0 +1,34 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.venv/
+venv/
+env/
+*.egg-info/
+dist/
+build/
+
+# Scraper output
+scraper/output/*.json
+scraper/output/*.jsonl
+scraper/output/*.csv
+scraper/output/*.html
+scraper/output/*.md
+scraper/output/*.txt
+!scraper/output/.gitkeep
+
+# Scrapling
+*.db
+.scrapling_dependencies_installed
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db

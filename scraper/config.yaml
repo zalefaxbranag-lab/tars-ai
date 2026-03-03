@@ -1,0 +1,138 @@
+# ==================================================================
+# TARS Scraper — Configuration des jobs et spiders
+# ==================================================================
+#
+# 2 types de taches :
+#   - jobs:    Scrape simple (1 ou N URLs, pas de link-following)
+#   - spiders: Crawl concurrent (link-following, dedup, pause/resume)
+#
+# 3 modes de fetch :
+#   - basic:   HTTP rapide via curl_cffi (par defaut)
+#   - dynamic: Playwright/Chromium pour les sites JS-heavy
+#   - stealth: Anti-detection (bypass Cloudflare, canvas noise, etc.)
+#
+# Selecteurs CSS :
+#   Simple:   "h1"              -> texte du premier h1
+#   Complet:  {selector: "a", attr: "href", all: true}
+#
+
+# ------------------------------------------------------------------
+# JOBS — Scrapes simples (fetch + extract)
+# ------------------------------------------------------------------
+jobs:
+  # Exemple 1 : Scrape basique d'une page
+  - name: example-basic
+    url: "https://example.com"
+    mode: basic
+    selectors:
+      title: "h1"
+      paragraphs:
+        selector: "p"
+        all: true
+    output:
+      format: json
+      file: example-basic.json
+
+  # Exemple 2 : Scrape de plusieurs URLs
+  - name: hacker-news-top
+    urls:
+      - "https://news.ycombinator.com/"
+      - "https://news.ycombinator.com/newest"
+    mode: basic
+    selectors:
+      titles:
+        selector: ".titleline > a"
+        all: true
+      scores:
+        selector: ".score"
+        all: true
+    output:
+      format: jsonl
+      file: hackernews.jsonl
+
+  # Exemple 3 : Site JS-heavy avec DynamicFetcher
+  # - name: spa-example
+  #   url: "https://some-spa-site.com"
+  #   mode: dynamic
+  #   options:
+  #     headless: true
+  #     network_idle: true
+  #     timeout: 60000
+  #   selectors:
+  #     products:
+  #       selector: ".product-card h2"
+  #       all: true
+  #     prices:
+  #       selector: ".product-price"
+  #       all: true
+  #   output:
+  #     format: json
+  #     file: spa-products.json
+
+  # Exemple 4 : Site protege avec StealthyFetcher
+  # - name: cloudflare-site
+  #   url: "https://some-protected-site.com"
+  #   mode: stealth
+  #   options:
+  #     solve_cloudflare: true
+  #     hide_canvas: true
+  #     block_webrtc: true
+  #     headless: true
+  #   selectors:
+  #     content: "article"
+  #   output:
+  #     format: json
+  #     file: protected-content.json
+
+# ------------------------------------------------------------------
+# SPIDERS — Crawls concurrents avec link-following
+# ------------------------------------------------------------------
+spiders:
+  # Exemple : Crawler un blog
+  - name: example-crawler
+    start_urls:
+      - "https://example.com"
+    allowed_domains:
+      - "example.com"
+    concurrent_requests: 4
+    download_delay: 1.0
+    max_pages: 20
+    follow_links: "a[href]"
+    # follow_pattern: "/blog/"  # Regex pour filtrer les liens suivis
+    selectors:
+      title: "h1"
+      text:
+        selector: "p"
+        all: true
+    session:
+      timeout: 30
+      stealthy_headers: true
+      # proxy: "http://user:pass@proxy:8080"
+      # impersonate: "chrome"
+    output:
+      format: jsonl
+      file: example-crawl.jsonl
+    # crawldir: "./checkpoints/example"  # Pour pause/resume
+
+  # Exemple : Crawler avec proxy rotation
+  # - name: mass-crawler
+  #   start_urls:
+  #     - "https://target-site.com/page/1"
+  #   allowed_domains:
+  #     - "target-site.com"
+  #   concurrent_requests: 8
+  #   download_delay: 0.5
+  #   max_pages: 500
+  #   follow_links: "a.next-page"
+  #   selectors:
+  #     title: "h1"
+  #     data:
+  #       selector: "table.data tr td"
+  #       all: true
+  #   session:
+  #     proxy: "http://user:pass@rotating-proxy:8080"
+  #     retries: 5
+  #   output:
+  #     format: jsonl
+  #     file: mass-data.jsonl
+  #   crawldir: "./checkpoints/mass"
